@@ -288,5 +288,38 @@ def load_photo():
         return "Форма отправлена"
 
 
+@app.route('/carousel')
+def carousel():
+    return f"""<!doctype html>
+                    <html lang="en">
+                      <head>
+                        <meta charset="utf-8">
+                        <link rel="stylesheet" type="text/css" href="{url_for('static', filename='css/style.css')}" />
+                        <link rel="stylesheet"
+                    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+                    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+                    crossorigin="anonymous">
+                        <title>Результаты</title>
+                      </head>
+                      <body>
+                        <h1>Пейзажи Марса</h1>
+                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                          <div class="carousel-inner">
+                            <div class="carousel-item active">
+                              <img src="/static/images_for_carusel/landscape1.jpg" class="d-block w-100" alt="landscape1" style="max-width: 500px; height: auto;">
+                            </div>
+                            <div class="carousel-item">
+                              <img src="/static/images_for_carusel/landscape2.jpg" class="d-block w-100" alt="landscape1" style="max-width: 500px; height: auto;">
+                            </div>
+                            <div class="carousel-item">
+                              <img src="/static/images_for_carusel/landscape3.jpg" class="d-block w-100" alt="landscape1" style="max-width: 500px; height: auto;">
+                            </div>
+                          </div>
+                        </div>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+                      </body>
+                    </html>"""
+
+
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
