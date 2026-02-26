@@ -23,13 +23,18 @@
         {% if how %}
             <h2>Список профессий</h2>
             {% if how == 'ol' %}
-                {% for item in prof_list %}
-                    <li>{{ loop.index }} {{ item }}</li>
-                {% endfor %}
+                <ol>
+                    {% for item in prof_list %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ol>up
             {% elif how == 'ul' %}
-                {% for item in prof_list %}
-                    <li>{{ loop.index }} {{ item }}</li>
-                {% endfor %}
+                <ul>
+                    {% for item in prof_list %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endif %}
     </body>
 </html>
