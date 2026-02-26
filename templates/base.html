@@ -7,5 +7,12 @@
     <body>
         <h1>Миссия Колонизация Марса</h1>
         <h4>И на Марсе будут яблони цвести!</h4>
+        {% if "инженер" in proffesion or "строитель" in profession %}
+            <h2>Инженерные тренажеры</h2>
+            <img src="{{ url_for('static', filename='images/map_for_it.jpg') }}" >
+        {% else %}
+            <h2>Научные симуляторы</h2>
+            <img src="{{ url_for('static', filename='images/map_for_ns.jpg') }}" >
+        {% endif %}
     </body>
 </html>
