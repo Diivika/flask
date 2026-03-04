@@ -2,6 +2,16 @@ from flask import Flask, url_for, request, render_template
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+answers = {
+    'title': 'Анкета',
+    'surname': 'Watny',
+    'name': 'Mark',
+    'education': 'выше среднего',
+    'profession': 'штурман марсохода',
+    'sex': 'male',
+    'motivation': 'Всегда мечтал застрять на Марсе!',
+    'ready': 'True'
+}
 
 @app.route('/<title>')
 @app.route('/index/<title>')
@@ -23,6 +33,12 @@ def spisok(listing):
     param = {}
     param['how'] = listing
     return render_template('prof_listing.html', **param)
+
+
+@app.route('/answer')
+@app.route('/auto_answer')
+def answer():
+    return render_template('auto_answer.html', **answers)
 
 
 if __name__ == '__main__':
