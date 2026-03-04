@@ -18,9 +18,11 @@ def training(prof):
     return render_template('index.html', **param)
 
 
-@app.route('/list_prof/<list>')
-def spisok(list):
-    return render_template('base.html', how=list)
+@app.route('/list_prof/<listing>')
+def spisok(listing):
+    param = {}
+    param['how'] = listing
+    return render_template('prof_listing.html', **param)
 
 
 if __name__ == '__main__':
