@@ -373,7 +373,7 @@ def login():
 
 @app.route('/distribution')
 def distribution():
-    return render_template('distribution.html', **answers)
+    return render_template('distribution.html')
 
 
 if __name__ == '__main__':
