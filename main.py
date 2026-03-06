@@ -376,6 +376,13 @@ def distribution():
     return render_template('distribution.html')
 
 
+@app.route('/table/<gender>/<int:age>')
+def table(gender, age):
+    param = {}
+    param['gender'] = gender
+    param['age'] = age
+    return render_template('table.html', **param)
+
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
 
