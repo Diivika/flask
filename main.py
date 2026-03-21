@@ -7,11 +7,16 @@ from data.jobs import Jobs
 from add_users import insert_users
 from add_jobs import insert_jobs
 from forms.register_user import RegisterForm
+from forms.login_user import LoginForm
+from flask_login import LoginManager, login_user
+from flask_login import login_required, logout_user
 
 db_sess = db_session.create_session()
 db_session.global_init("db/mars_explorer.db")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+login_manager = LoginManager()
+login_manager.init_app(app)
 answers = {
     'title': 'Анкета',
     'surname': 'Watny',
@@ -22,6 +27,12 @@ answers = {
     'motivation': 'Всегда мечтал застрять на Марсе!',
     'ready': 'True'
 }
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.get(User, user_id)
 
 
 @app.route('/promotion')
@@ -371,19 +382,6 @@ def answer():
     return render_template('auto_answer.html', **answers)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'GET':
-        return render_template('login.html')
-    elif request.method == 'POST':
-        print(request.form['id_astronaut'], '')
-        print(request.form['password_astronaut'], '')
-        print(request.form['id_captain'], '')
-        print(request.form['password_captain'], '')
-
-        return "Доступ разрешен"
-
-
 @app.route('/distribution')
 def distribution():
     return render_template('distribution.html')
@@ -428,6 +426,26 @@ def reqister():
             return 'Oops, something dont work'
     return render_template('register.html', title='Регистрация', form=form)
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template('login.html', title='Авторизация', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
