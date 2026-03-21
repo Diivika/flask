@@ -429,7 +429,7 @@ def reqister():
             user.set_password(form.password.data)
             db_sess.add(user)
             db_sess.commit()
-            return 'success'
+            return redirect('/login')
         except Exception:
             return 'Oops, something dont work'
     return render_template('register.html', title='Регистрация', form=form)
