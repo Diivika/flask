@@ -619,5 +619,23 @@ def member():
     return render_template('member.html', data=data)
 
 
+@app.route('/galery', methods=['GET', 'POST'])
+def galery():
+    if request.method == 'GET':
+        if not os.path.exists('static/uploads'):
+            os.makedirs('static/uploads')
+        images = os.listdir('static/uploads')
+        images = ['static/uploads/' + img for img in images if img.endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+    elif request.method == 'POST':
+        if not os.path.exists('static/uploads'):
+            os.makedirs('static/uploads')
+        f = request.files['file']
+        f.save(f'static/uploads/{f.filename}')
+        images = os.listdir('static/uploads')
+        images = ['static/uploads/' + img for img in images if img.endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+        return render_template('galery.html', images=images)
+    return render_template('galery.html', images=images)
+
+
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
