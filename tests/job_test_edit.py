@@ -1,0 +1,15 @@
+from requests import get, put
+
+print(put('http://localhost:8080/api/jobs/1', json={}).json())
+
+print(put('http://localhost:8080/api/jobs/1',
+           json={'job': 'asfafafasfasfas'}).json())
+
+print(put('http://localhost:8080/api/jobs/2',
+           json={'team_leader': 2,
+                 'job': 'Remake room',
+                 'collaborators': '2, 1',
+                 'work_size': 11,
+                 'is_finished': False}).json())
+
+print(get('http://localhost:8080/api/jobs').json())
