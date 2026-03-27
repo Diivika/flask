@@ -15,6 +15,8 @@ from flask_login import LoginManager, login_user
 from flask_login import login_required, logout_user, current_user
 import json
 from flask import make_response
+from requests import get
+from get_image import search_address, getImage
 
 db_session.global_init("db/mars_explorer.db")
 db_sess = db_session.create_session()
@@ -105,10 +107,20 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
+@app.route('/users_show/<int:user_id>', methods=['GET', 'POST'])
+def users_show(user_id):
+    city = get(f'http://localhost:8080/api/users/{user_id}').json()['users']['city_from']
+    name, surname = get(f'http://localhost:8080/api/users/{user_id}').json()['users']['name'], \
+        get(f'http://localhost:8080/api/users/{user_id}').json()['users']['surname']
+    if city:
+        res = search_address(city)
+        link = getImage(res)
+        return render_template('city_from.html', link=link, name=name, surname=surname, city=city)
+
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
-
 
 @app.errorhandler(400)
 def bad_request(_):
