@@ -13,6 +13,7 @@ print(post('http://localhost:8080/api/users',
                  'email': 'superpilot@mars.space',
                  'address': 'module_2',
                  'password': 'sigmawork',
+                 'city_from': 'Beijing',
                  'speciality': 'pilot_professional'}).json())
 
 

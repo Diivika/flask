@@ -1,8 +1,8 @@
 from requests import get, put
 
-print(put('http://localhost:8080/api/users/1', json={}).json())
+print(put('http://localhost:8080/api/users/2', json={}).json())
 
-print(put('http://localhost:8080/api/users/1',
+print(put('http://localhost:8080/api/users/2',
            json={'name': 'asfafafasfasfas'}).json())
 
 print(put('http://localhost:8080/api/users/2',
