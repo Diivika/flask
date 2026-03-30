@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, url_for, request, render_template, redirect, abort, jsonify
 from data import db_session, jobs_api, users_api
 from data.users import User
@@ -17,10 +16,14 @@ import json
 from flask import make_response
 from requests import get
 from get_image import search_address, getImage
+from flask_restful import reqparse, abort, Api, Resource
+from data import users_resource
+
 
 db_session.global_init("db/mars_explorer.db")
 db_sess = db_session.create_session()
 app = Flask(__name__)
+api = Api(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -34,6 +37,11 @@ answers = {
     'motivation': 'Всегда мечтал застрять на Марсе!',
     'ready': 'True'
 }
+
+api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+
+# для одного объекта
+api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:users_id>')
 
 
 @login_manager.user_loader
