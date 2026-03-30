@@ -19,7 +19,6 @@ from get_image import search_address, getImage
 from flask_restful import reqparse, abort, Api, Resource
 from data import users_resource
 
-
 db_session.global_init("db/mars_explorer.db")
 db_sess = db_session.create_session()
 app = Flask(__name__)
@@ -37,11 +36,6 @@ answers = {
     'motivation': 'Всегда мечтал застрять на Марсе!',
     'ready': 'True'
 }
-
-api.add_resource(users_resource.UsersListResource, '/api/v2/users')
-
-# для одного объекта
-api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:users_id>')
 
 
 @login_manager.user_loader
@@ -130,6 +124,7 @@ def users_show(user_id):
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
@@ -139,4 +134,6 @@ if __name__ == '__main__':
     db_session.global_init("db/mars_explorer.db.db")
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
+    api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+    api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:users_id>')
     app.run(port=8080, host='127.0.0.1')
