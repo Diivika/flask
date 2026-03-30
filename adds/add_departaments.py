@@ -4,15 +4,15 @@ from data.departments import Department
 
 db_session.global_init("db/mars_explorer.db")
 data = [{'title': 'Mars explores',
-         'chief': 6,
+         'chief': 1,
          'email': 'tinker@mars.space',
          'members': '2, 3',},
         {'title': 'Mars hz',
-         'chief': 5,
+         'chief': 2,
          'email': 'tinker2@mars.space',
          'members': '1, 4', },
         {'title': 'Mars shadows',
-         'chief': 7,
+         'chief': 3,
          'email': 'tinker3@mars.space',
          'members': '5, 6', },
         ]

@@ -1,7 +1,6 @@
 import os
-
-from flask import Flask, url_for, request, render_template, redirect, abort
-from data import db_session
+from flask import Flask, url_for, request, render_template, redirect, abort, jsonify
+from data import db_session, jobs_api, users_api
 from data.users import User
 from data.jobs import Jobs
 from data.news import News
@@ -14,10 +13,16 @@ from forms.departments_form import NewsDepartment
 from flask_login import LoginManager, login_user
 from flask_login import login_required, logout_user, current_user
 import json
+from flask import make_response
+from requests import get
+from get_image import search_address, getImage
+from flask_restful import reqparse, abort, Api, Resource
+from data import users_resource
 
 db_session.global_init("db/mars_explorer.db")
 db_sess = db_session.create_session()
 app = Flask(__name__)
+api = Api(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -426,12 +431,14 @@ def reqister():
                 position=form.position.data,
                 speciality=form.speciality.data,
                 address=form.address.data,
+                city_from=form.city_from.data
             )
             user.set_password(form.password.data)
             db_sess.add(user)
             db_sess.commit()
             return redirect('/login')
-        except Exception:
+        except Exception as e:
+            print(e)
             return 'Oops, something dont work'
     return render_template('register.html', title='Регистрация', form=form)
 
@@ -646,6 +653,30 @@ def galery():
         return render_template('galery.html', images=images)
     return render_template('galery.html', images=images)
 
+@app.route('/users_show/<int:user_id>', methods=['GET', 'POST'])
+def users_show(user_id):
+    city = get(f'http://localhost:8080/api/users/{user_id}').json()['users']['city_from']
+    name, surname = get(f'http://localhost:8080/api/users/{user_id}').json()['users']['name'], \
+        get(f'http://localhost:8080/api/users/{user_id}').json()['users']['surname']
+    if city:
+        res = search_address(city)
+        link = getImage(res)
+        return render_template('city_from.html', link=link, name=name, surname=surname, city=city)
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+@app.errorhandler(400)
+def bad_request(_):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)
+
 
 if __name__ == '__main__':
+    db_session.global_init("db/mars_explorer.db.db")
+    app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(users_api.blueprint)
+    api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+    api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:users_id>')
     app.run(port=8080, host='127.0.0.1')

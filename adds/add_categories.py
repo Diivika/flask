@@ -5,8 +5,6 @@ db_session.global_init("db/mars_explorer.db")
 
 
 def add_categories():
-    db_sess = db_session.create_session()
-
     categories = [
         '1',
         '2',
